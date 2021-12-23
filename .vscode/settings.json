@@ -1,0 +1,8 @@
+{
+    "python.autoComplete.extraPaths": ["__pypackages__/3.7/lib"],
+    "python.analysis.extraPaths": [
+      "__pypackages__/3.7/lib"
+    ],
+    "python.pythonPath": "C:\\Users\\Fabien.Valthier\\AppData\\Local\\Programs\\Python\\Python37\\python.exe",
+    "python.formatting.provider": "black"
+  }
