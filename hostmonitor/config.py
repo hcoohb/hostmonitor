@@ -25,10 +25,12 @@ class Config:
                     self.parser.set(section, "interval", glob_inter)
 
     def dump(self):
-        print(self.parser.sections())
-        print(self.parser.items(section="full"))
-        print(self.parser["full"])
-        print(self.get_section_dict("full"))
+        print("Config DUMP:")
+        for section in self.get_sections():
+            options = self.get_section_dict(section)
+            print(f"[{section}]")
+            for k, v in options.items():
+                print(f"  {k}={v}")
 
     def get_sections(self) -> List[str]:
         return self.parser.sections()
