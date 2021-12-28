@@ -14,7 +14,7 @@ class Config:
 
     def read(self):
         # define default global section:
-        self.parser.read_dict({"global": {"interval": 10}})
+        self.parser.read_dict({"global": {"interval": 30}})
         if Path(self.config_file).exists():
             self.parser.read(self.config_file)
         # for each section, add default values:
