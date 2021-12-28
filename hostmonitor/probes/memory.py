@@ -7,7 +7,7 @@ from probes._probe import Probe
 
 
 @register_class
-class SysInfo(Probe):
+class Memory(Probe):
     def run(self) -> Dict:
         """Collect memory info"""
         memory_stats = psutil.virtual_memory()
