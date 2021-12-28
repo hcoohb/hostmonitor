@@ -7,7 +7,7 @@ from probes._probe import Probe
 
 
 @register_class
-class SysInfo(Probe):
+class Disk(Probe):
     def run(self) -> Dict:
         """Collect disks info"""
         # Disk Info
