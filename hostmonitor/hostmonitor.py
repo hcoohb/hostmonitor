@@ -1,15 +1,13 @@
-import importlib
+import queue
 import sched
 import socket
-import time
 import threading
-import queue
+import time
 from typing import List, Type
-import inspect
 
-from config import Config
 import exports as export_plugins
 import probes as probes_plugins
+from config import Config
 from probes._probe import Probe
 
 
@@ -23,8 +21,6 @@ class HostMonitor:
         self.scheduler = sched.scheduler(time.time, time.sleep)
         self.q: queue.Queue = queue.Queue(maxsize=50)
         self.probes: List[Probe] = []
-        hostname = socket.gethostname()
-        print(f"HOSTNAME: {hostname}")
         exports = []
 
         # load exports:
@@ -65,6 +61,10 @@ class HostMonitor:
             return
         param = self.config.get_section_dict(section)
         param.pop("probe")
+        if "runon" in param:
+            if socket.gethostname() != param["runon"]:
+                return
+            param.pop("runon")
         if not probes_plugins.validate_args(p_module, param):
             return
         cls: Type[Probe] = probes_plugins.get(p_module)
