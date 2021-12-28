@@ -10,7 +10,10 @@ SUBSTITUTE = "_"
 
 
 def whitelisted(s, whitelist=WHITELIST, substitute=SUBSTITUTE):
-    return "".join(c if c in whitelist else substitute for c in s)
+    parts = [part for part in s.split("/") if part != ""]
+    for i in range(len(parts)):
+        parts[i] = "".join(c if c in whitelist else substitute for c in parts[i])
+    return "/".join(parts)
 
 
 @register_class
@@ -20,8 +23,7 @@ class export_mqtt:
         self.host = host
         self.port = int(port)
         self.client = None
-        prefix_list = [whitelisted(s) for s in prefix.split("/") if s != ""]
-        self.prefix = "/".join(prefix_list + [socket.gethostname()])
+        self.prefix = whitelisted(prefix + "/" + socket.gethostname())
 
     def export(self, data):
         print(f"trying to publish to mqtt with: {data}")
