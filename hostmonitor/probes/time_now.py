@@ -1,11 +1,20 @@
+import time
 from datetime import datetime
-from probes._probe import Probe
+
+import psutil
 from plugins import register_class
+
+from probes._probe import Probe
 
 
 @register_class
 class TimeNow(Probe):
     def run(self):
-        now = datetime.now()
-        current_time = now.strftime("%H:%M:%S")
-        return current_time
+        """Collect time info"""
+        timestamp = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S+00:00")
+        uptime = int(time.time() - psutil.boot_time())
+        lastboot = datetime.fromtimestamp(psutil.boot_time()).strftime(
+            "%Y-%m-%dT%H:%M:%S"
+        )
+        ret_dict = {"uptime": uptime, "timestamp": timestamp, "lastboot": lastboot}
+        return ret_dict
