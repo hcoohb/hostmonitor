@@ -1,7 +1,9 @@
 import plugins
 from typing import Type
 from probes._probe import Probe as ProbsCls
+
 registered = plugins.names_factory(__package__)
+required_args = plugins.required_args_factory(__package__)
 
 
 def get(plugin: str):

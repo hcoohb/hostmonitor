@@ -4,13 +4,13 @@ from collections import namedtuple
 from importlib import resources
 import inspect
 
-from typing import Dict
+from typing import Dict, List
 
 # Basic structure for storing information about one plugin
 Plugin = namedtuple("Plugin", ("name", "cls"))
 
 # Dictionary with information about all registered plugins
-_PLUGINS :Dict = {}
+_PLUGINS: Dict = {}
 
 
 def register(func):
@@ -69,6 +69,18 @@ def _import_all(package):
         _import(package, plugin)
 
 
+def required_args(package, plugin) -> List:
+    """Return a list of required argument when instancing the plugin"""
+    cls = get(package, plugin)
+    args_no_default = [
+        p.name
+        for p in inspect.signature(cls.__init__).parameters.values()
+        if p.name != "self" and p.default is p.empty
+    ]
+    # print(f"{plugin} parameters: {args_no_default}")
+    return args_no_default
+
+
 def names_factory(package):
     """Create a names() function for one package"""
     return functools.partial(names, package)
@@ -82,3 +94,7 @@ def get_factory(package):
 def call_factory(package):
     """Create a call() function for one package"""
     return functools.partial(call, package)
+
+
+def required_args_factory(package):
+    return functools.partial(required_args, package)

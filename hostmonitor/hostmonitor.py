@@ -1,9 +1,11 @@
 import importlib
 import sched
+import socket
 import time
 import threading
 import queue
 from typing import List, Type
+import inspect
 
 from config import Config
 import exports as export_plugins
@@ -21,16 +23,28 @@ class HostMonitor:
         self.scheduler = sched.scheduler(time.time, time.sleep)
         self.q: queue.Queue = queue.Queue(maxsize=50)
         self.probes: List[Probe] = []
+        hostname = socket.gethostname()
+        print(f"HOSTNAME: {hostname}")
         exports = []
 
         # load exports:
         for ex in config.get_sections_with_option("export"):
             ex_module = config.get_option(ex, "export")
-            if ex_module in export_plugins.registered():
-                cls = export_plugins.get(ex_module)
-                param = config.get_section_dict(ex)
-                param.pop("export")
-                exports.append(cls(**param))
+            if ex_module not in export_plugins.registered():
+                continue
+            cls = export_plugins.get(ex_module)
+            args = export_plugins.required_args(ex_module)
+            param = config.get_section_dict(ex)
+            param.pop("export")  # remove key export
+            must_break = False
+            for arg in args:
+                if arg not in param:
+                    print(f"Could not load plugin {ex} as parameter {arg} is missing")
+                    must_break = True
+                break
+            if must_break:
+                continue
+            exports.append(cls(**param))
 
         # load probes:
         for probe_title in config.get_sections_with_option("probe"):
