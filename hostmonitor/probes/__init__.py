@@ -4,6 +4,7 @@ from probes._probe import Probe as ProbsCls
 
 registered = plugins.names_factory(__package__)
 required_args = plugins.required_args_factory(__package__)
+validate_args = plugins.validate_args_factory(__package__)
 
 
 def get(plugin: str):

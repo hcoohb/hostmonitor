@@ -75,10 +75,26 @@ def required_args(package, plugin) -> List:
     args_no_default = [
         p.name
         for p in inspect.signature(cls.__init__).parameters.values()
-        if p.name != "self" and p.default is p.empty
+        if p.name != "self"
+        and p.default is p.empty
+        and p.kind != p.VAR_POSITIONAL
+        and p.kind != p.VAR_KEYWORD
     ]
     # print(f"{plugin} parameters: {args_no_default}")
     return args_no_default
+
+
+def validate_args(package, plugin, args) -> bool:
+    """Ensure the plugin class can be instanciated with given args"""
+    args_req = required_args(package, plugin)
+    validated = True
+    args_missing = [arg for arg in args_req if arg not in args]
+    if len(args_missing) > 0:
+        print(
+            f"Could not load plugin '{plugin}' as parameters {args_missing} is/are missing"
+        )
+        return False
+    return True
 
 
 def names_factory(package):
@@ -98,3 +114,7 @@ def call_factory(package):
 
 def required_args_factory(package):
     return functools.partial(required_args, package)
+
+
+def validate_args_factory(package):
+    return functools.partial(validate_args, package)

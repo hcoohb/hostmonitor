@@ -32,19 +32,11 @@ class HostMonitor:
             ex_module = config.get_option(ex, "export")
             if ex_module not in export_plugins.registered():
                 continue
-            cls = export_plugins.get(ex_module)
-            args = export_plugins.required_args(ex_module)
             param = config.get_section_dict(ex)
             param.pop("export")  # remove key export
-            must_break = False
-            for arg in args:
-                if arg not in param:
-                    print(f"Could not load plugin {ex} as parameter {arg} is missing")
-                    must_break = True
-                break
-            if must_break:
-                continue
-            exports.append(cls(**param))
+            if export_plugins.validate_args(ex_module, param):
+                cls = export_plugins.get(ex_module)
+                exports.append(cls(**param))
 
         # load probes:
         for probe_title in config.get_sections_with_option("probe"):
@@ -69,11 +61,14 @@ class HostMonitor:
 
     def setup_probe(self, section: str):
         p_module = self.config.get_option(section, "probe")
-        if p_module in probes_plugins.registered():
-            cls: Type[Probe] = probes_plugins.get(p_module)
-            param = self.config.get_section_dict(section)
-            param.pop("probe")
-            self.probes.append(cls(self.scheduler, self.q, section, **param))
+        if p_module not in probes_plugins.registered():
+            return
+        param = self.config.get_section_dict(section)
+        param.pop("probe")
+        if not probes_plugins.validate_args(p_module, param):
+            return
+        cls: Type[Probe] = probes_plugins.get(p_module)
+        self.probes.append(cls(self.scheduler, self.q, section, **param))
 
 
 if __name__ == "__main__":
