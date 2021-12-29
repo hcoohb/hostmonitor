@@ -1,7 +1,7 @@
 [project]
-name = ""
-version = ""
-description = ""
+name = "hostmonitor"
+version = "0.1"
+description = "Python application to monitor sensors and others on the host"
 authors = [
     {name = "Fabien Valthier", email = "hcoohb@gmail.com"},
 ]
@@ -13,8 +13,10 @@ requires-python = ">=3.7"
 license = {text = "MIT"}
 
 [project.urls]
-homepage = ""
+homepage = "https://github.com/hcoohb/hostmonitor"
 
+[project.scripts]
+hostmonitor = "hostmonitor.hostmonitor:main"
 
 [project.optional-dependencies]
 [tool]

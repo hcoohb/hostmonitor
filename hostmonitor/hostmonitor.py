@@ -71,5 +71,9 @@ class HostMonitor:
         self.probes.append(cls(self.scheduler, self.q, section, **param))
 
 
-if __name__ == "__main__":
+def main():
     t = HostMonitor()
+
+
+if __name__ == "__main__":
+    main()
