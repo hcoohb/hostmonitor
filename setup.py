@@ -25,6 +25,7 @@ setup_kwargs = {
     'maintainer_email': None,
     'url': 'https://github.com/hcoohb/hostmonitor',
     'packages': [
+        'hostmonitor',
         'hostmonitor.exports',
         'hostmonitor.probes',
     ],
