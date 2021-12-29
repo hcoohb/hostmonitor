@@ -1,5 +1,7 @@
-from plugins import register_class
+from hostmonitor.plugins import register_class
+
 print("importing PRINT")
+
 
 @register_class
 class export_print:

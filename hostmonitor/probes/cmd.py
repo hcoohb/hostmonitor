@@ -1,9 +1,8 @@
 import subprocess
 from typing import Dict
 
-from plugins import register_class
-
-from probes._probe import Probe
+from hostmonitor.plugins import register_class
+from hostmonitor.probes._probe import Probe
 
 
 @register_class

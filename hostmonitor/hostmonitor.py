@@ -5,10 +5,10 @@ import threading
 import time
 from typing import List, Type
 
-import exports as export_plugins
-import probes as probes_plugins
-from config import Config
-from probes._probe import Probe
+import hostmonitor.exports as export_plugins
+import hostmonitor.probes as probes_plugins
+from hostmonitor.config import Config
+from hostmonitor.probes._probe import Probe
 
 
 class HostMonitor:

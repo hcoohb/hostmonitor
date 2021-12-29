@@ -1,6 +1,7 @@
-import plugins
 from typing import Type
-from probes._probe import Probe as ProbsCls
+
+import hostmonitor.plugins as plugins
+from hostmonitor.probes._probe import Probe as ProbsCls
 
 registered = plugins.names_factory(__package__)
 required_args = plugins.required_args_factory(__package__)

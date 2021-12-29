@@ -1,9 +1,9 @@
-from plugins import register_class
 import socket
 import string
 from typing import Dict, List, Union
 
 import paho.mqtt.client as paho
+from hostmonitor.plugins import register_class
 
 WHITELIST = "_-" + string.ascii_letters + string.digits
 SUBSTITUTE = "_"

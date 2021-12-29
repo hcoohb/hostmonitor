@@ -1,9 +1,8 @@
 import functools
 import importlib
+import inspect
 from collections import namedtuple
 from importlib import resources
-import inspect
-
 from typing import Dict, List
 
 # Basic structure for storing information about one plugin

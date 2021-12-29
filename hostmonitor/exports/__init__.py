@@ -1,4 +1,4 @@
-import plugins
+import hostmonitor.plugins as plugins
 
 print("### I am from exports")
 
